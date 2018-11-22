@@ -23,6 +23,13 @@
           <button class="btn btn-outline-secondary" id="showNotificationBtn">Mostrar notificación</button>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-12">
+          <ul id="consoleDrawer"></ul>
+        </div>
+      </div>
+
     </div>
 
 
@@ -35,6 +42,7 @@
     <script type="text/JavaScript">
       document.addEventListener('DOMContentLoaded', function(){
         var _btn = document.getElementById('showNotificationBtn');
+        var _consoleDrawer = document.getElementById('consoleDrawer');
 
         _btn.addEventListener('click', function() {
           _showNotification();
@@ -42,14 +50,28 @@
 
 
         function _showNotification() {
+          _log('Current permission is -> ' + Notification.permission);
+
           if(Notification.permission === 'granted') {
+            _log('Showing notification');
             var _notification = new Notification('Hola');
           }
           else if(Notification.permission !== 'denied') {
+            _log('Requestiong permission');
             Notification.requestPermission(function(permission) {
-              if(permission === 'granted') { _showNotification(); }
+              _log('New permission is -> ' + Notification.permission);
+              if(permission === 'granted') { 
+                _showNotification(); 
+                }
             });
           }
+        }
+
+
+        function _log(message) {
+          var li = document.createElement('li');
+          li.textContent = message;
+          _consoleDrawer.appendChild(li);
         }
 
       });
